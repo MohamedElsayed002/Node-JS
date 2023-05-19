@@ -8,7 +8,7 @@ const createReview = async (req,res) => {
 
     const isValidProduct = await Product.findOne({_id : productId})
     if(!isValidProduct) {
-        console.log(`no product with id : ${productId}`)
+        throw new Error(`no product with id : ${productId}`)
         return;
     }
 
@@ -18,7 +18,7 @@ const createReview = async (req,res) => {
     })
 
     if(alreadySubmitted) {
-        console.log('you submitted review beforee')
+        throw new Error('you submitted review beforee')
     }
 
 
@@ -37,7 +37,7 @@ const getSingleReview = async (req,res) => {
     const {id} = req.params
     const review = await Review.findOne({_id : id})
     if(!review) {
-        console.log("review not found")
+        throw new Error("review not found")
     }
     res.status(201).json({review})
 }
@@ -48,7 +48,7 @@ const updateReview = async (req,res) => {
 
     const review = await Review.findOne({_id : id})
     if(!review) {
-        console.log('not found')
+        throw new Error("review not found")
     }
 
     checkPermission(req.user,review.user)

@@ -6,7 +6,7 @@ const authenticateUser = async (req,res,next) => {
     const token = req.headers.authorization;
 
     if(!token) {
-        console.log('a7a')
+        throw new Error("invalid token")
     }
     
 
@@ -16,25 +16,18 @@ const authenticateUser = async (req,res,next) => {
         req.user = {name : payload.name , userId : payload.userId , role : payload.role}
         next()
     }catch(error) {
-        console.log(error)
+        throw new Error(error)
     }
 }
 
 
-// const authorizePermissions = (req,res,next) => {
-//     if(req.user.role === "admin") {
-//         console.log("go away motherfather ")
-//     }
-//     console.log("anta tmam w ana b7bk")
-//     next()
-// }
+
 
 const authorizePermissions = (...roles) => {
     return (req,res,next) => {
         if(!roles.includes(req.user.role)) {
-            console.log("a mashy ya abn ws5a mn hna :) ")
+            throw new Error("you are not authorized to access this route")
         }
-        console.log("b7bk")
         next()
     }
 }

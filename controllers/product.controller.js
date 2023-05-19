@@ -30,7 +30,7 @@ const updateProduct = async (req,res) => {
     })
 
     if(!product) { 
-        console.log("product not found")
+        throw new Error("product not found")
     }
 
     res.status(201).json({message : "product updated successfully" , product})
@@ -40,7 +40,7 @@ const deleteProduct = async (req,res) => {
     const {id : productId} = req.params
     const product = await Product.findOne({_id : productId})
     if(!product) {
-        console.log("product not found")
+        throw new Error("product not found")
     }
 
     await product.delete()
@@ -50,17 +50,17 @@ const deleteProduct = async (req,res) => {
 
 const uploadImages = async (req,res) => {
     if(!req.files) {
-        console.log("no file uploaded")
+        throw new Error("no file uploaded")
     }
 
     const productImage = req.files.image
     if(!productImage.mimetype.startsWith('image')) {
-        console.log("only photos ya dudeee")
+        throw new Error("only photos ya dudee")
     }
 
     const maxSize = 1024 * 1024
     if(productImage.size > maxSize) {
-        console.log("max size exceeded")
+        throw new Error("max size exceeded")
     }
 
     const imagePath = path.join(__dirname , '../public/uploads/' + `${productImage.name}`)

@@ -28,7 +28,8 @@ const showCurrentUser = async (req,res) => {
 const updateUser = async (req,res) => {
     const {email , name} = req.body
     if(!email || !name) {
-        console.log("all fields are required")
+        throw new Error("all fields are required")
+
     }
     const user = await User.findOneAndUpdate(
             {_id : req.user.userId},
@@ -46,13 +47,13 @@ const updateUser = async (req,res) => {
 const updatedUserPassword = async (req,res) => {
     const {oldPassword , newPassword} = req.body
     if(!oldPassword || !newPassword) {
-        console.log("leh kda b2olk")
+        throw new Error("all fields are required")
     }
     const user = await User.findOne({_id : req.user.userId})
     console.log(user)
     const isPasswordCorrect = await user.comparePassword(oldPassword)
     if(!isPasswordCorrect) {
-        console.log("password 8lt ya cosamk")
+        throw new Error("wrong password")
     }
 
     user.password = newPassword
